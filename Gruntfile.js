@@ -27,6 +27,28 @@ module.exports = function (grunt) {
     // Project settings
     yeoman: appConfig,
 
+    // Compile less stylesheets
+    less: {
+      dist: {
+        options: {
+         paths: ['<%= yeoman.app %>/styles'],
+         ieCompat: false
+        },
+        files: {
+         ".tmp/styles/main.css": "<%= yeoman.app %>/styles/main.less"
+        }
+      },
+      dev: {
+        options: {
+         paths: ['<%= yeoman.app %>/styles'],
+         ieCompat: false
+        },
+        files: {
+         ".tmp/styles/main.css": "<%= yeoman.app %>/styles/main.less"
+        }
+      }
+    },
+
     // Watches files for changes and runs tasks based on the changed files
     watch: {
       bower: {
@@ -60,16 +82,20 @@ module.exports = function (grunt) {
           '.tmp/styles/{,*/}*.css',
           '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]
+      },
+      less: {
+        files: ['<%= yeoman.app %>/styles/{,*/}*.less'],
+        tasks: ['less:dev']
       }
     },
 
     // The actual grunt server settings
     connect: {
       options: {
-        port: 9000,
+        port: 9010,
         // Change this to '0.0.0.0' to access the server from outside.
-        hostname: 'localhost',
-        livereload: 35729
+        hostname: '0.0.0.0',
+        livereload: 35728
       },
       livereload: {
         options: {
@@ -163,7 +189,7 @@ module.exports = function (grunt) {
     // Automatically inject Bower components into the app
     wiredep: {
       options: {
-        cwd: '<%= yeoman.app %>'
+        cwd: './'
       },
       app: {
         src: ['<%= yeoman.app %>/index.html'],
@@ -277,17 +303,19 @@ module.exports = function (grunt) {
       }
     },
 
-    // ngmin tries to make the code safe for minification automatically by
-    // using the Angular long form for dependency injection. It doesn't work on
-    // things like resolve or inject so those have to be done manually.
-    ngmin: {
-      dist: {
-        files: [{
-          expand: true,
-          cwd: '.tmp/concat/scripts',
-          src: '*.js',
-          dest: '.tmp/concat/scripts'
-        }]
+    ngAnnotate: { 
+      dist: { 
+        files: [ 
+          { 
+            expand: true
+            , cwd: '.tmp/concat/scripts'
+            , src: [ 
+              '*.js'
+              , '!oldieshim.js'
+            ]
+            , dest: '.tmp/concat/scripts'
+          }
+        ]
       }
     },
 
@@ -355,6 +383,20 @@ module.exports = function (grunt) {
         configFile: 'test/karma.conf.js',
         singleRun: true
       }
+    },
+
+    // Bump
+    bump:
+    { options:
+      { files:
+        [ 'package.json'
+        , 'bower.json'
+        ]
+      , commitFiles:
+        [ 'package.json'
+        , 'bower.json'
+        ]
+      }
     }
   });
 
@@ -367,6 +409,7 @@ module.exports = function (grunt) {
     grunt.task.run([
       'clean:server',
       'wiredep',
+      'less:dev',
       'concurrent:server',
       'autoprefixer',
       'connect:livereload',
@@ -390,11 +433,12 @@ module.exports = function (grunt) {
   grunt.registerTask('build', [
     'clean:dist',
     'wiredep',
+    'less:dev',
     'useminPrepare',
     'concurrent:dist',
     'autoprefixer',
     'concat',
-    'ngmin',
+    'ngAnnotate',
     'copy:dist',
     'cdnify',
     'cssmin',

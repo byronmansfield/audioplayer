@@ -8,6 +8,8 @@
  * Controller of the audioplayerApp
  */
 angular.module('audioplayerApp')
-  .controller('GlobalCtrl', function ($scope) {
+  .controller('GlobalCtrl', function ($scope, Navigation) {
+
+  	$scope.navigation = Navigation.links()
     
   })

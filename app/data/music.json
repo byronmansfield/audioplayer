@@ -1,0 +1,39 @@
+[
+
+	{
+		"title": "Song Title 1"
+		, "artist": {
+			"name": "Artist Name 1"
+		}
+		, "album": {
+			"name": "Album Name 1"
+		}
+		, "image": "AlbumConver1"
+		, "file": "mp3file1"
+	}
+
+	, {
+		"title": "Song Title 2"
+		, "artist": {
+			"name": "Artist Name 2"
+		}
+		, "album": {
+			"name": "Album Name 2"
+		}
+		, "image": "AlbumConver2"
+		, "file": "mp3file2"
+	}
+
+	, {
+		"title": "Song Title 3"
+		, "artist": {
+			"name": "Artist Name 3"
+		}
+		, "album": {
+			"name": "Album Name 3"
+		}
+		, "image": "AlbumConver3"
+		, "file": "mp3file3"
+	}
+
+]
